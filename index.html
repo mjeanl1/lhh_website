@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LHH — Laboratoire d'Hydraulique et d'Hydroinformatique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1A3A5C;
+  --blue: #2E6DA4;
+  --sky: #4A9FD4;
+  --gold: #E8A020;
+  --gold-light: #F5C040;
+  --cream: #F8F5F0;
+  --white: #FFFFFF;
+  --gray-100: #F0EDE8;
+  --gray-200: #D8D3CC;
+  --gray-400: #9AAFBF;
+  --gray-600: #5A6E7F;
+  --gray-900: #1C2A36;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--gray-900);
+  background: var(--cream);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* ==================== LANGUAGE SWITCHER ==================== */
+.lang-switcher {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  gap: 2px;
+  background: rgba(26,58,92,0.9);
+  backdrop-filter: blur(12px);
+  border-radius: 8px;
+  padding: 3px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.lang-btn {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.3s;
+  letter-spacing: 0.5px;
+}
+
+.lang-btn.active {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.lang-btn:hover:not(.active) {
+  color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+/* Hide/show by language */
+[data-lang] { display: none; }
+[data-lang="fr"] { display: block; }
+span[data-lang="fr"], a[data-lang="fr"] { display: inline; }
+
+/* ==================== NAVIGATION ==================== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 900;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(26,58,92,0.95);
+  backdrop-filter: blur(16px);
+  transition: all 0.4s;
+}
+
+nav.scrolled {
+  padding: 10px 40px;
+  box-shadow: 0 2px 30px rgba(0,0,0,0.15);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-logo svg { height: 38px; width: auto; }
+
+.nav-logo-text {
+  font-family: var(--font-display);
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: white; }
+.nav-links a:hover::after { width: 100%; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* ==================== HERO ==================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0D1F33 0%, #1A3A5C 35%, #2E6DA4 100%);
+}
+
+.hero-bg-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.5) 40px, rgba(255,255,255,0.5) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.5) 40px, rgba(255,255,255,0.5) 41px);
+}
+
+.hero-wave {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  padding: 120px 60px 80px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(232,160,32,0.15);
+  border: 1px solid rgba(232,160,32,0.3);
+  padding: 6px 16px;
+  border-radius: 40px;
+  color: var(--gold-light);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  animation: fadeInUp 0.8s ease both;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5.5vw, 64px);
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease 0.15s both;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+  max-width: 620px;
+  margin-bottom: 36px;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+
+.hero-partners {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 0.45s both;
+}
+
+.hero-partners img {
+  height: 44px;
+  opacity: 0.8;
+  filter: brightness(0) invert(1);
+  transition: opacity 0.3s;
+}
+
+.hero-partners img:hover { opacity: 1; }
+
+.hero-partners .partner-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255,255,255,0.2);
+}
+
+.hero-cta-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 36px;
+  animation: fadeInUp 0.8s ease 0.5s both;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  padding: 14px 32px;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(232,160,32,0.35);
+}
+
+.btn-outline {
+  padding: 14px 32px;
+  background: transparent;
+  color: white;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.btn-outline:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.08);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Floating elements in hero */
+.hero-float {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 420px;
+  height: 420px;
+  opacity: 0.12;
+}
+
+.hero-float circle {
+  animation: floatOrbit 20s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes floatOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==================== SECTIONS ==================== */
+section {
+  padding: 100px 60px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 44px);
+  color: var(--navy);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.section-subtitle {
+  font-size: 17px;
+  color: var(--gray-600);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ==================== ABOUT / MISSION ==================== */
+.about {
+  background: white;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.about-visual {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  padding: 48px;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-visual .stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.about-text h3 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--navy);
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.about-text p {
+  font-size: 16px;
+  color: var(--gray-600);
+  margin-bottom: 16px;
+}
+
+.about-text .highlight-box {
+  background: var(--gray-100);
+  border-left: 4px solid var(--gold);
+  padding: 20px 24px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 24px;
+}
+
+.highlight-box p {
+  font-size: 15px;
+  color: var(--navy);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ==================== PROGRAMME ==================== */
+.programme {
+  background: var(--cream);
+}
+
+.programme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.course-card {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid var(--gray-200);
+  transition: all 0.35s;
+  position: relative;
+  overflow: hidden;
+}
+
+.course-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--blue);
+  transform: scaleY(0);
+  transition: transform 0.35s;
+  transform-origin: top;
+}
+
+.course-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 8px 32px rgba(46,109,164,0.1);
+  transform: translateY(-3px);
+}
+
+.course-card:hover::before { transform: scaleY(1); }
+
+.course-card.specialization::before { background: var(--gold); }
+.course-card.methodology::before { background: #6B8E5A; }
+
+.course-number {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+
+.course-type {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.type-fondamental { background: rgba(46,109,164,0.1); color: var(--blue); }
+.type-specialisation { background: rgba(232,160,32,0.12); color: var(--gold); }
+.type-methodologie { background: rgba(107,142,90,0.12); color: #6B8E5A; }
+
+.course-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--navy);
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.course-tools {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tool-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* ==================== RESEARCH AXES ==================== */
+.research {
+  background: linear-gradient(135deg, #0D1F33 0%, #1A3A5C 60%, #234B73 100%);
+  color: white;
+}
+
+.research .section-label { color: var(--gold); }
+.research .section-title { color: white; }
+.research .section-subtitle { color: rgba(255,255,255,0.6); }
+
+.axes-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.axis-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 32px 36px;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 24px;
+  align-items: start;
+  transition: all 0.35s;
+  cursor: default;
+}
+
+.axis-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(232,160,32,0.3);
+  transform: translateX(6px);
+}
+
+.axis-number {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.axis-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: white;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.axis-desc {
+  font-size: 15px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+}
+
+/* ==================== PARTNERS ==================== */
+.partners {
+  background: white;
+}
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.partner-card {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s;
+}
+
+.partner-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+.partner-card img {
+  max-height: 56px;
+  max-width: 160px;
+  margin-bottom: 16px;
+  object-fit: contain;
+}
+
+.partner-card h4 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.partner-card p {
+  font-size: 13px;
+  color: var(--gray-600);
+  line-height: 1.5;
+}
+
+/* ==================== SOFTWARE ==================== */
+.software {
+  background: var(--cream);
+}
+
+.software-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.software-card {
+  background: white;
+  border-radius: 10px;
+  padding: 24px 20px;
+  text-align: center;
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s;
+}
+
+.software-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 4px 20px rgba(46,109,164,0.08);
+}
+
+.sw-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 auto 14px;
+}
+
+.software-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.software-card p {
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+/* ==================== CONTACT / CTA ==================== */
+.cta-section {
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  text-align: center;
+  padding: 80px 60px;
+}
+
+.cta-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 40px);
+  color: white;
+  margin-bottom: 16px;
+}
+
+.cta-section p {
+  color: rgba(255,255,255,0.7);
+  font-size: 17px;
+  max-width: 540px;
+  margin: 0 auto 32px;
+}
+
+.contact-emails {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.contact-email {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.contact-email:hover {
+  background: rgba(255,255,255,0.14);
+  border-color: var(--gold);
+}
+
+.contact-email .email-role {
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==================== FOOTER ==================== */
+footer {
+  background: #0D1520;
+  padding: 48px 60px 28px;
+  color: rgba(255,255,255,0.4);
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 32px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-brand span {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+}
+
+.footer-links {
+  display: flex;
+  gap: 40px;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover { color: var(--gold); }
+
+.footer-bottom {
+  text-align: center;
+  font-size: 13px;
+}
+
+.footer-bottom .mrif-note {
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  margin-top: 8px;
+}
+
+/* ==================== ANIMATIONS ==================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 900px) {
+  section { padding: 64px 24px; }
+  nav { padding: 12px 20px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(26,58,92,0.97);
+    padding: 20px;
+    gap: 16px;
+  }
+  .hero-content { padding: 100px 24px 60px; }
+  .hero-float { display: none; }
+  .about-grid { grid-template-columns: 1fr; }
+  .lang-switcher { top: 12px; right: 60px; }
+  .hero-partners img { height: 32px; }
+  .cta-section { padding: 60px 24px; }
+  footer { padding: 36px 24px 20px; }
+  .footer-top { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 28px; }
+  .programme-grid { grid-template-columns: 1fr; }
+  .software-grid { grid-template-columns: 1fr 1fr; }
+  .contact-emails { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-switcher">
+  <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+  <button class="lang-btn" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" onclick="setLang('ht')">KR</button>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    <svg width="36" height="36" viewBox="0 0 144 144" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="navDrop" x1="10%" y1="0%" x2="90%" y2="100%">
+          <stop offset="0%" stop-color="#4A9FD4"/>
+          <stop offset="100%" stop-color="#E8A020"/>
+        </linearGradient>
+      </defs>
+      <path d="M72 5 C72 5 24 54 24 82 C24 109 46 130 72 130 C98 130 120 109 120 82 C120 54 72 5 72 5Z" fill="url(#navDrop)"/>
+      <path d="M20 88 Q30 74 40 88 Q50 102 60 88 Q70 74 80 88 Q90 102 100 88 Q110 74 120 88" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="3.5" stroke-linecap="round" clip-path="url(#navDropClip)"/>
+    </svg>
+    <span class="nav-logo-text">LHH</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" data-lang="fr">Mission</a><a href="#about" data-lang="en">Mission</a><a href="#about" data-lang="ht">Misyon</a></li>
+    <li><a href="#programme" data-lang="fr">Programme</a><a href="#programme" data-lang="en">Program</a><a href="#programme" data-lang="ht">Pwogram</a></li>
+    <li><a href="#research" data-lang="fr">Recherche</a><a href="#research" data-lang="en">Research</a><a href="#research" data-lang="ht">Rechèch</a></li>
+    <li><a href="#software" data-lang="fr">Logiciels</a><a href="#software" data-lang="en">Software</a><a href="#software" data-lang="ht">Lojisyèl</a></li>
+    <li><a href="#partners" data-lang="fr">Partenaires</a><a href="#partners" data-lang="en">Partners</a><a href="#partners" data-lang="ht">Patnè</a></li>
+    <li><a href="#contact" data-lang="fr">Contact</a><a href="#contact" data-lang="en">Contact</a><a href="#contact" data-lang="ht">Kontak</a></li>
+  </ul>
+  <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-pattern"></div>
+
+  <div class="hero-content">
+    <!-- FR -->
+    <div data-lang="fr">
+      <div class="hero-badge">UEH-CHCL · INRS Québec · Phase Pilote 2025–2027</div>
+      <h1>Laboratoire d'Hydraulique<br>et d'<em>Hydroinformatique</em></h1>
+      <p class="hero-sub">Premier programme de maîtrise en hydraulique et hydroinformatique en Haïti — former la prochaine génération d'ingénieurs et de scientifiques spécialisés dans la gestion durable de l'eau et l'adaptation aux changements climatiques.</p>
+    </div>
+    <!-- EN -->
+    <div data-lang="en">
+      <div class="hero-badge">UEH-CHCL · INRS Québec · Pilot Phase 2025–2027</div>
+      <h1>Laboratory of Hydraulics<br>and <em>Hydroinformatics</em></h1>
+      <p class="hero-sub">Haiti's first master's program in hydraulics and hydroinformatics — training the next generation of engineers and scientists specialized in sustainable water management and climate change adaptation.</p>
+    </div>
+    <!-- HT -->
+    <div data-lang="ht">
+      <div class="hero-badge">UEH-CHCL · INRS Kebèk · Faz Pilòt 2025–2027</div>
+      <h1>Laboratwa Idwolik<br>ak <em>Idwoenfoòmatik</em></h1>
+      <p class="hero-sub">Premye pwogram metriz nan idwolik ak idwoenfoòmatik ann Ayiti — fòme pwochen jenerasyon enjenyè ak syantifik ki espesyalize nan jesyon dirab dlo ak adaptasyon nan chanjman klimatik.</p>
+    </div>
+
+    <div class="hero-partners">
+      <img src="Logo_UEH-CHCL_jpg.jpeg" alt="UEH-CHCL" style="border-radius:50%; height:48px;">
+      <div class="partner-divider"></div>
+      <img src="Logo-INRS-horizontal-1024x622.png" alt="INRS" style="height:36px; border-radius:4px;">
+      <div class="partner-divider"></div>
+      <img src="LogoUEH2.png" alt="UEH" style="height:36px;">
+    </div>
+
+    <div class="hero-cta-row">
+      <a href="#programme" class="btn-primary" data-lang="fr">Découvrir le programme ↓</a>
+      <a href="#programme" class="btn-primary" data-lang="en">Explore the program ↓</a>
+      <a href="#programme" class="btn-primary" data-lang="ht">Dekouvri pwogram nan ↓</a>
+
+      <a href="#contact" class="btn-outline" data-lang="fr">Nous contacter</a>
+      <a href="#contact" class="btn-outline" data-lang="en">Contact us</a>
+      <a href="#contact" class="btn-outline" data-lang="ht">Kontakte nou</a>
+    </div>
+  </div>
+
+  <!-- Decorative floating circles -->
+  <svg class="hero-float" viewBox="0 0 400 400">
+    <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(232,160,32,0.3)" stroke-width="1" stroke-dasharray="8 12"/>
+    <circle cx="200" cy="200" r="130" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.8" stroke-dasharray="4 8"/>
+    <circle cx="200" cy="200" r="80" fill="none" stroke="rgba(232,160,32,0.2)" stroke-width="1.5"/>
+    <circle cx="200" cy="80" r="5" fill="rgba(232,160,32,0.6)"/>
+    <circle cx="320" cy="200" r="4" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="200" cy="320" r="6" fill="rgba(74,159,212,0.5)"/>
+  </svg>
+
+  <!-- Hero wave bottom -->
+  <svg class="hero-wave" viewBox="0 0 1440 100" preserveAspectRatio="none">
+    <path d="M0 40 C360 90 720 10 1080 50 C1260 70 1380 60 1440 40 L1440 100 L0 100Z" fill="var(--white)"/>
+  </svg>
+</section>
+
+<!-- ABOUT / MISSION -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <!-- FR -->
+      <div data-lang="fr">
+        <h3>Une initiative transformatrice pour l'enseignement supérieur en Haïti</h3>
+        <p>Le LHH est une plateforme de recherche et de formation spécialisée en ingénierie de l'eau, établie à l'Université d'État d'Haïti — Campus Henry Christophe de Limonade, en partenariat avec l'Institut National de la Recherche Scientifique du Québec.</p>
+        <p>Face aux inondations récurrentes, à l'érosion côtière et aux impacts des changements climatiques, Haïti a besoin d'ingénieurs et de chercheurs formés localement avec les outils les plus avancés.</p>
+        <div class="highlight-box">
+          <p>Le premier programme de maîtrise recherche en hydraulique et hydroinformatique en Haïti — 13 cours, 5 axes de recherche, des partenaires de classe mondiale.</p>
+        </div>
+      </div>
+      <!-- EN -->
+      <div data-lang="en">
+        <h3>A transformative initiative for higher education in Haiti</h3>
+        <p>The LHH is a research and training platform specialized in water engineering, established at the Université d'État d'Haïti — Campus Henry Christophe de Limonade, in partnership with the Institut National de la Recherche Scientifique in Québec.</p>
+        <p>Facing recurrent floods, coastal erosion, and climate change impacts, Haiti needs locally trained engineers and researchers equipped with state-of-the-art tools.</p>
+        <div class="highlight-box">
+          <p>Haiti's first research master's program in hydraulics and hydroinformatics — 13 courses, 5 research axes, world-class partners.</p>
+        </div>
+      </div>
+      <!-- HT -->
+      <div data-lang="ht">
+        <h3>Yon inisyativ ki transfòme ansèyman siperyè ann Ayiti</h3>
+        <p>LHH se yon platfòm rechèch ak fòmasyon ki espesyalize nan jeni dlo, ki tabli nan Inivèsite d'Eta d'Ayiti — Kanpis Henry Christophe de Limonade, an patenarya avèk Enstiti Nasyonal Rechèch Syantifik Kebèk.</p>
+        <p>Devan inondasyon ki repete, ewozyon kot ak enpak chanjman klimatik, Ayiti bezwen enjenyè ak chèchè ki fòme lokalman avèk zouti ki pi avanse yo.</p>
+        <div class="highlight-box">
+          <p>Premye pwogram metriz rechèch nan idwolik ak idwoenfoòmatik ann Ayiti — 13 kou, 5 aks rechèch, patnè klas mondyal.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-visual reveal">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-number">13</div>
+          <div class="stat-label" data-lang="fr">Cours spécialisés</div>
+          <div class="stat-label" data-lang="en">Specialized courses</div>
+          <div class="stat-label" data-lang="ht">Kou espesyalize</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5</div>
+          <div class="stat-label" data-lang="fr">Axes de recherche</div>
+          <div class="stat-label" data-lang="en">Research axes</div>
+          <div class="stat-label" data-lang="ht">Aks rechèch</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">40–50</div>
+          <div class="stat-label" data-lang="fr">Étudiants formés</div>
+          <div class="stat-label" data-lang="en">Students trained</div>
+          <div class="stat-label" data-lang="ht">Etidyan ki fòme</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2</div>
+          <div class="stat-label" data-lang="fr">Ans — durée du programme</div>
+          <div class="stat-label" data-lang="en">Years — program duration</div>
+          <div class="stat-label" data-lang="ht">Zan — dire pwogram nan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMME -->
+<section class="programme" id="programme">
+  <div class="section-header reveal">
+    <div class="section-label" data-lang="fr">Curriculum</div>
+    <div class="section-label" data-lang="en">Curriculum</div>
+    <div class="section-label" data-lang="ht">Kourikoulòm</div>
+
+    <h2 class="section-title" data-lang="fr">Programme de Maîtrise</h2>
+    <h2 class="section-title" data-lang="en">Master's Program</h2>
+    <h2 class="section-title" data-lang="ht">Pwogram Metriz</h2>
+
+    <p class="section-subtitle" data-lang="fr">Un programme structuré en trois blocs thématiques — fondamentaux, spécialisation et méthodologie — complétés par un mémoire de recherche.</p>
+    <p class="section-subtitle" data-lang="en">A program structured in three thematic blocks — fundamentals, specialization, and methodology — complemented by a research thesis.</p>
+    <p class="section-subtitle" data-lang="ht">Yon pwogram ki estrikti nan twa blòk tematik — fondamantal, espesyalizasyon ak metodoloji — konplete pa yon memwa rechèch.</p>
+  </div>
+
+  <div class="programme-grid">
+    <!-- Course cards -->
+    <div class="course-card reveal">
+      <div class="course-number">01</div>
+      <span class="course-type type-fondamental" data-lang="fr">Fondamental</span>
+      <span class="course-type type-fondamental" data-lang="en">Core</span>
+      <span class="course-type type-fondamental" data-lang="ht">Fondamantal</span>
+      <div class="course-title" data-lang="fr">Hydraulique avancée et écoulements en surface libre</div>
+      <div class="course-title" data-lang="en">Advanced Hydraulics and Open-Channel Flow</div>
+      <div class="course-title" data-lang="ht">Idwolik avanse ak ekoulmàn an sifas lib</div>
+      <div class="course-tools"><span class="tool-tag">HEC-RAS</span><span class="tool-tag">Python</span></div>
+    </div>
+
+    <div class="course-card reveal">
+      <div class="course-number">02</div>
+      <span class="course-type type-fondamental" data-lang="fr">Fondamental</span>
+      <span class="course-type type-fondamental" data-lang="en">Core</span>
+      <span class="course-type type-fondamental" data-lang="ht">Fondamantal</span>
+      <div class="course-title" data-lang="fr">Hydrologie appliquée et modélisation des bassins versants</div>
+      <div class="course-title" data-lang="en">Applied Hydrology and Watershed Modeling</div>
+      <div class="course-title" data-lang="ht">Idwoloji aplike ak modelizasyon basen vèsan</div>
+      <div class="course-tools"><span class="tool-tag">HEC-HMS</span><span class="tool-tag">QGIS</span></div>
+    </div>
+
+    <div class="course-card reveal">
+      <div class="course-number">03</div>
+      <span class="course-type type-fondamental" data-lang="fr">Fondamental</span>
+      <span class="course-type type-fondamental" data-lang="en">Core</span>
+      <span class="course-type type-fondamental" data-lang="ht">Fondamantal</span>
+      <div class="course-title" data-lang="fr">Hydroinformatique et programmation scientifique</div>
+      <div class="course-title" data-lang="en">Hydroinformatics and Scientific Programming</div>
+      <div class="course-title" data-lang="ht">Idwoenfoòmatik ak pwogramasyon syantifik</div>
+      <div class="course-tools"><span class="tool-tag">Python</span><span class="tool-tag">Jupyter</span></div>
+    </div>
+
+    <div class="course-card reveal">
+      <div class="course-number">04</div>
+      <span class="course-type type-fondamental" data-lang="fr">Fondamental</span>
+      <span class="course-type type-fondamental" data-lang="en">Core</span>
+      <span class="course-type type-fondamental" data-lang="ht">Fondamantal</span>
+      <div class="course-title" data-lang="fr">Méthodes numériques pour l'ingénierie de l'eau</div>
+      <div class="course-title" data-lang="en">Numerical Methods for Water Engineering</div>
+      <div class="course-title" data-lang="ht">Metòd nimerik pou jeni dlo</div>
+      <div class="course-tools"><span class="tool-tag">Python</span><span class="tool-tag">MATLAB</span></div>
+    </div>
+
+    <div class="course-card reveal">
+      <div class="course-number">05</div>
+      <span class="course-type type-fondamental" data-lang="fr">Fondamental</span>
+      <span class="course-type type-fondamental" data-lang="en">Core</span>
+      <span class="course-type type-fondamental" data-lang="ht">Fondamantal</span>
+      <div class="course-title" data-lang="fr">SIG et télédétection pour les ressources en eau</div>
+      <div class="course-title" data-lang="en">GIS and Remote Sensing for Water Resources</div>
+      <div class="course-title" data-lang="ht">SIG ak teledeteksyon pou resous dlo</div>
+      <div class="course-tools"><span class="tool-tag">QGIS</span><span class="tool-tag">Google Earth Engine</span></div>
+    </div>
+
+    <div class="course-card reveal">
+      <div class="course-number">06</div>
+      <span class="course-type type-fondamental" data-lang="fr">Fondamental</span>
+      <span class="course-type type-fondamental" data-lang="en">Core</span>
+      <span class="course-type type-fondamental" data-lang="ht">Fondamantal</span>
+      <div class="course-title" data-lang="fr">Analyse de données I — Méthodes déterministes</div>
+      <div class="course-title" data-lang="en">Data Analysis I — Deterministic Methods</div>
+      <div class="course-title" data-lang="ht">Analiz done I — Metòd detèminis</div>
+      <div class="course-tools"><span class="tool-tag">NumPy</span><span class="tool-tag">SciPy</span><span class="tool-tag">Pandas</span></div>
+    </div>
+
+    <div class="course-card reveal">
+      <div class="course-number">07</div>
+      <span class="course-type type-fondamental" data-lang="fr">Fondamental</span>
+      <span class="course-type type-fondamental" data-lang="en">Core</span>
+      <span class="course-type type-fondamental" data-lang="ht">Fondamantal</span>
+      <div class="course-title" data-lang="fr">Analyse de données II — Méthodes probabilistes</div>
+      <div class="course-title" data-lang="en">Data Analysis II — Probabilistic Methods</div>
+      <div class="course-title" data-lang="ht">Analiz done II — Metòd pwobabilis</div>
+      <div class="course-tools"><span class="tool-tag">PyMC</span><span class="tool-tag">Scikit-learn</span></div>
+    </div>
+
+    <div class="course-card specialization reveal">
+      <div class="course-number">08</div>
+      <span class="course-type type-specialisation" data-lang="fr">Spécialisation</span>
+      <span class="course-type type-specialisation" data-lang="en">Specialization</span>
+      <span class="course-type type-specialisation" data-lang="ht">Espesyalizasyon</span>
+      <div class="course-title" data-lang="fr">Hydrodynamique côtière et estuarienne</div>
+      <div class="course-title" data-lang="en">Coastal and Estuarine Hydrodynamics</div>
+      <div class="course-title" data-lang="ht">Idwodinamik kotyè ak estiaryèn</div>
+      <div class="course-tools"><span class="tool-tag">Delft3D-FM</span><span class="tool-tag">MIKE 21</span></div>
+    </div>
+
+    <div class="course-card specialization reveal">
+      <div class="course-number">09</div>
+      <span class="course-type type-specialisation" data-lang="fr">Spécialisation</span>
+      <span class="course-type type-specialisation" data-lang="en">Specialization</span>
+      <span class="course-type type-specialisation" data-lang="ht">Espesyalizasyon</span>
+      <div class="course-title" data-lang="fr">Transport de sédiments et morphodynamique</div>
+      <div class="course-title" data-lang="en">Sediment Transport and Morphodynamics</div>
+      <div class="course-title" data-lang="ht">Transpò sediman ak mòfodinamik</div>
+      <div class="course-tools"><span class="tool-tag">Delft3D-FM</span><span class="tool-tag">XBeach</span></div>
+    </div>
+
+    <div class="course-card specialization reveal">
+      <div class="course-number">10</div>
+      <span class="course-type type-specialisation" data-lang="fr">Spécialisation</span>
+      <span class="course-type type-specialisation" data-lang="en">Specialization</span>
+      <span class="course-type type-specialisation" data-lang="ht">Espesyalizasyon</span>
+      <div class="course-title" data-lang="fr">Modélisation hydrodynamique 1D/2D des rivières et des crues</div>
+      <div class="course-title" data-lang="en">1D/2D Hydrodynamic Modeling of Rivers and Floods</div>
+      <div class="course-title" data-lang="ht">Modelizasyon idwodinamik 1D/2D rivyè ak inondasyon</div>
+      <div class="course-tools"><span class="tool-tag">HEC-RAS</span><span class="tool-tag">MIKE FLOOD</span></div>
+    </div>
+
+    <div class="course-card specialization reveal">
+      <div class="course-number">11</div>
+      <span class="course-type type-specialisation" data-lang="fr">Spécialisation</span>
+      <span class="course-type type-specialisation" data-lang="en">Specialization</span>
+      <span class="course-type type-specialisation" data-lang="ht">Espesyalizasyon</span>
+      <div class="course-title" data-lang="fr">Changements climatiques et adaptation des ressources en eau</div>
+      <div class="course-title" data-lang="en">Climate Change and Water Resources Adaptation</div>
+      <div class="course-title" data-lang="ht">Chanjman klimatik ak adaptasyon resous dlo</div>
+      <div class="course-tools"><span class="tool-tag">CMIP6</span><span class="tool-tag">Python</span><span class="tool-tag">SWAT</span></div>
+    </div>
+
+    <div class="course-card methodology reveal">
+      <div class="course-number">12</div>
+      <span class="course-type type-methodologie" data-lang="fr">Méthodologie</span>
+      <span class="course-type type-methodologie" data-lang="en">Methodology</span>
+      <span class="course-type type-methodologie" data-lang="ht">Metodoloji</span>
+      <div class="course-title" data-lang="fr">Méthodes de recherche et rédaction scientifique (FR/EN)</div>
+      <div class="course-title" data-lang="en">Research Methods and Scientific Writing (FR/EN)</div>
+      <div class="course-title" data-lang="ht">Metòd rechèch ak redaksyon syantifik (FR/EN)</div>
+      <div class="course-tools"><span class="tool-tag">LaTeX</span><span class="tool-tag">Zotero</span></div>
+    </div>
+
+    <div class="course-card reveal" style="background: linear-gradient(135deg, var(--navy), var(--blue)); border: none;">
+      <div class="course-number" style="color: var(--gold);">13</div>
+      <span class="course-type" style="background: rgba(232,160,32,0.2); color: var(--gold);" data-lang="fr">Recherche</span>
+      <span class="course-type" style="background: rgba(232,160,32,0.2); color: var(--gold);" data-lang="en">Research</span>
+      <span class="course-type" style="background: rgba(232,160,32,0.2); color: var(--gold);" data-lang="ht">Rechèch</span>
+      <div class="course-title" style="color: white;" data-lang="fr">Mémoire de maîtrise — Recherche originale</div>
+      <div class="course-title" style="color: white;" data-lang="en">Master's Thesis — Original Research</div>
+      <div class="course-title" style="color: white;" data-lang="ht">Memwa metriz — Rechèch orijinal</div>
+      <div class="course-tools"><span class="tool-tag" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8);">Tous les outils</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH AXES -->
+<section class="research" id="research">
+  <div class="section-header reveal">
+    <div class="section-label" data-lang="fr">Axes de Recherche</div>
+    <div class="section-label" data-lang="en">Research Axes</div>
+    <div class="section-label" data-lang="ht">Aks Rechèch</div>
+
+    <h2 class="section-title" data-lang="fr">Cinq priorités scientifiques</h2>
+    <h2 class="section-title" data-lang="en">Five scientific priorities</h2>
+    <h2 class="section-title" data-lang="ht">Senk priyorite syantifik</h2>
+
+    <p class="section-subtitle" data-lang="fr">Des thématiques de recherche définies en cohérence avec les priorités nationales haïtiennes en matière de gestion des risques et d'adaptation climatique.</p>
+    <p class="section-subtitle" data-lang="en">Research themes defined in alignment with Haiti's national priorities for risk management and climate adaptation.</p>
+    <p class="section-subtitle" data-lang="ht">Tèm rechèch ki defini an akò avèk priyorite nasyonal Ayiti pou jesyon risk ak adaptasyon klimatik.</p>
+  </div>
+
+  <div class="axes-container">
+    <div class="axis-card reveal">
+      <div class="axis-number">1</div>
+      <div>
+        <div class="axis-title" data-lang="fr">Cartographie des risques d'inondation et systèmes d'alerte précoce</div>
+        <div class="axis-title" data-lang="en">Flood Risk Mapping and Early Warning Systems</div>
+        <div class="axis-title" data-lang="ht">Katografi risk inondasyon ak sistèm avètisman bonè</div>
+        <div class="axis-desc" data-lang="fr">Développement d'outils de modélisation et cartographie des risques adaptés au terrain haïtien, exploitant les données satellitaires et les modèles hydrauliques 2D haute résolution.</div>
+        <div class="axis-desc" data-lang="en">Development of modeling and risk mapping tools adapted to Haitian terrain, leveraging satellite data and high-resolution 2D hydraulic models.</div>
+        <div class="axis-desc" data-lang="ht">Devlopman zouti modelizasyon ak katografi risk ki adapte pou tèren ayisyen, ki itilize done satelit ak modèl idwolik 2D rezolisyon wo.</div>
+      </div>
+    </div>
+
+    <div class="axis-card reveal">
+      <div class="axis-number">2</div>
+      <div>
+        <div class="axis-title" data-lang="fr">Hydrologie des changements climatiques en contexte tropical insulaire</div>
+        <div class="axis-title" data-lang="en">Climate Change Hydrology in Tropical Island Contexts</div>
+        <div class="axis-title" data-lang="ht">Idwoloji chanjman klimatik nan kontèks zile tropikal</div>
+        <div class="axis-desc" data-lang="fr">Évolution des régimes hydrologiques haïtiens face à l'intensification des cyclones, aux modifications des régimes pluviométriques et à l'élévation du niveau marin.</div>
+        <div class="axis-desc" data-lang="en">Evolution of Haitian hydrological regimes facing intensifying cyclones, shifting rainfall patterns, and sea level rise.</div>
+        <div class="axis-desc" data-lang="ht">Evolisyon rejim idwolojik ayisyen fas ak ensitansifikasyon sikòn, chanjman nan rejim lapli ak monte nivo lanmè.</div>
+      </div>
+    </div>
+
+    <div class="axis-card reveal">
+      <div class="axis-number">3</div>
+      <div>
+        <div class="axis-title" data-lang="fr">Hydrodynamique côtière, tempêtes et vulnérabilité du littoral haïtien</div>
+        <div class="axis-title" data-lang="en">Coastal Hydrodynamics, Storms, and Haitian Shoreline Vulnerability</div>
+        <div class="axis-title" data-lang="ht">Idwodinamik kotyè, tanpèt ak vilnerabilite litoral ayisyen</div>
+        <div class="axis-desc" data-lang="fr">Domaine d'excellence le plus distinctif du LHH — surcotes de tempête, érosion côtière, intrusion saline et élévation du niveau de la mer sur la côte nord haïtienne.</div>
+        <div class="axis-desc" data-lang="en">The LHH's most distinctive domain of excellence — storm surge, coastal erosion, saltwater intrusion, and sea level rise along Haiti's northern coast.</div>
+        <div class="axis-desc" data-lang="ht">Domèn ekselans ki pi distenktif LHH la — siskòt tanpèt, ewozyon kotyè, entrizyon salè ak monte nivo lanmè sou kòt nò Ayiti.</div>
+      </div>
+    </div>
+
+    <div class="axis-card reveal">
+      <div class="axis-number">4</div>
+      <div>
+        <div class="axis-title" data-lang="fr">Transport de sédiments et gestion des bassins versants dégradés</div>
+        <div class="axis-title" data-lang="en">Sediment Transport and Degraded Watershed Management</div>
+        <div class="axis-title" data-lang="ht">Transpò sediman ak jesyon basen vèsan ki degrade</div>
+        <div class="axis-desc" data-lang="fr">Quantification du transport solide, modélisation de l'envasement et stratégies de reforestation pour les bassins versants haïtiens massivement déboisés.</div>
+        <div class="axis-desc" data-lang="en">Quantification of solid transport, siltation modeling, and reforestation strategies for Haiti's massively deforested watersheds.</div>
+        <div class="axis-desc" data-lang="ht">Kwantifikasyon transpò solid, modelizasyon anvazman ak estrateji rebwazman pou basen vèsan ayisyen ki debwaze masivman.</div>
+      </div>
+    </div>
+
+    <div class="axis-card reveal">
+      <div class="axis-number">5</div>
+      <div>
+        <div class="axis-title" data-lang="fr">Hydroinformatique, intelligence artificielle et gestion des données hydrologiques</div>
+        <div class="axis-title" data-lang="en">Hydroinformatics, AI, and Hydrological Data Management</div>
+        <div class="axis-title" data-lang="ht">Idwoenfoòmatik, entelijans atifisyèl ak jesyon done idwolojik</div>
+        <div class="axis-desc" data-lang="fr">Application des méthodes d'apprentissage automatique et des outils numériques modernes à la résolution des problèmes hydrologiques dans un contexte de données limitées.</div>
+        <div class="axis-desc" data-lang="en">Application of machine learning methods and modern digital tools to solve hydrological challenges in data-scarce environments.</div>
+        <div class="axis-desc" data-lang="ht">Aplikasyon metòd aprantisaj otomatik ak zouti nimerik modèn pou rezoud pwoblèm idwolojik nan anviwonman ki gen ti kras done.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOFTWARE / TOOLS -->
+<section class="software" id="software">
+  <div class="section-header reveal">
+    <div class="section-label" data-lang="fr">Infrastructure numérique</div>
+    <div class="section-label" data-lang="en">Digital Infrastructure</div>
+    <div class="section-label" data-lang="ht">Enfrastrikti nimerik</div>
+
+    <h2 class="section-title" data-lang="fr">Logiciels et outils de formation</h2>
+    <h2 class="section-title" data-lang="en">Software and Training Tools</h2>
+    <h2 class="section-title" data-lang="ht">Lojisyèl ak zouti fòmasyon</h2>
+  </div>
+
+  <div class="software-grid">
+    <div class="software-card reveal">
+      <div class="sw-icon">HR</div>
+      <h4>HEC-RAS / HEC-HMS</h4>
+      <p data-lang="fr">Modélisation hydraulique 1D/2D, pluie-débit</p>
+      <p data-lang="en">1D/2D hydraulic modeling, rainfall-runoff</p>
+      <p data-lang="ht">Modelizasyon idwolik 1D/2D, lapli-debi</p>
+    </div>
+    <div class="software-card reveal">
+      <div class="sw-icon">SW</div>
+      <h4>SWMM</h4>
+      <p data-lang="fr">Drainage urbain, eaux pluviales</p>
+      <p data-lang="en">Urban drainage, stormwater</p>
+      <p data-lang="ht">Drenaj iben, dlo lapli</p>
+    </div>
+    <div class="software-card reveal">
+      <div class="sw-icon" style="background: linear-gradient(135deg, #1E4976, #E8A020);">D3</div>
+      <h4>Delft3D-FM / XBeach</h4>
+      <p data-lang="fr">Hydrodynamique côtière 2D/3D</p>
+      <p data-lang="en">2D/3D coastal hydrodynamics</p>
+      <p data-lang="ht">Idwodinamik kotyè 2D/3D</p>
+    </div>
+    <div class="software-card reveal">
+      <div class="sw-icon" style="background: linear-gradient(135deg, #2E7D32, #4CAF50);">QG</div>
+      <h4>QGIS + GEE</h4>
+      <p data-lang="fr">Analyse géospatiale, télédétection</p>
+      <p data-lang="en">Geospatial analysis, remote sensing</p>
+      <p data-lang="ht">Analiz jewospasyal, teledeteksyon</p>
+    </div>
+    <div class="software-card reveal">
+      <div class="sw-icon" style="background: linear-gradient(135deg, #306998, #FFD43B);">Py</div>
+      <h4>Python</h4>
+      <p data-lang="fr">SciPy, NumPy, Pandas, PyMC, Scikit-learn</p>
+      <p data-lang="en">SciPy, NumPy, Pandas, PyMC, Scikit-learn</p>
+      <p data-lang="ht">SciPy, NumPy, Pandas, PyMC, Scikit-learn</p>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="partners" id="partners">
+  <div class="section-header reveal">
+    <div class="section-label" data-lang="fr">Partenariats</div>
+    <div class="section-label" data-lang="en">Partnerships</div>
+    <div class="section-label" data-lang="ht">Patenarya</div>
+
+    <h2 class="section-title" data-lang="fr">Réseau de partenaires internationaux</h2>
+    <h2 class="section-title" data-lang="en">International Partner Network</h2>
+    <h2 class="section-title" data-lang="ht">Rezo patnè entènasyonal</h2>
+  </div>
+
+  <div class="partners-grid">
+    <div class="partner-card reveal">
+      <img src="Logo-INRS-horizontal-1024x622.png" alt="INRS" style="filter: none;">
+      <h4>INRS — Centre Eau Terre Environnement</h4>
+      <p data-lang="fr">Québec, Canada — Co-encadrement, échanges d'étudiants, équipements</p>
+      <p data-lang="en">Québec, Canada — Co-supervision, student exchange, equipment</p>
+      <p data-lang="ht">Kebèk, Kanada — Ko-ankadman, echanj etidyan, ekipman</p>
+    </div>
+    <div class="partner-card reveal">
+      <div style="height:56px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+        <span style="font-family: var(--font-display); font-size: 22px; color: var(--navy); font-weight: 700;">IHE Delft</span>
+      </div>
+      <h4>IHE Delft Institute for Water Education</h4>
+      <p data-lang="fr">Pays-Bas — Conception curriculaire, bourses NFP, professeurs invités</p>
+      <p data-lang="en">Netherlands — Curriculum design, NFP scholarships, visiting professors</p>
+      <p data-lang="ht">Peyi Ba — Konsepsyon kourikoulòm, bous NFP, pwofesè envite</p>
+    </div>
+    <div class="partner-card reveal">
+      <div style="height:56px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+        <span style="font-family: var(--font-display); font-size: 22px; color: var(--navy); font-weight: 700;">TU Delft</span>
+      </div>
+      <h4>TU Delft — Hydraulic Engineering</h4>
+      <p data-lang="fr">Pays-Bas — Recherche en hydraulique computationnelle, Delft3D</p>
+      <p data-lang="en">Netherlands — Computational hydraulics research, Delft3D</p>
+      <p data-lang="ht">Peyi Ba — Rechèch nan idwolik enfòmatik, Delft3D</p>
+    </div>
+    <div class="partner-card reveal">
+      <div style="height:56px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+        <span style="font-family: var(--font-display); font-size: 22px; color: #00529C; font-weight: 700;">Deltares</span>
+      </div>
+      <h4>Deltares</h4>
+      <p data-lang="fr">Pays-Bas — Licences logiciels (Delft3D-FM, XBeach), ateliers techniques</p>
+      <p data-lang="en">Netherlands — Software licenses (Delft3D-FM, XBeach), technical workshops</p>
+      <p data-lang="ht">Peyi Ba — Lisans lojisyèl (Delft3D-FM, XBeach), atelye teknik</p>
+    </div>
+  </div>
+</section>
+
+<!-- FUNDING -->
+<section style="background: var(--gray-100); padding: 60px;">
+  <div style="max-width:800px; margin:0 auto; text-align:center;" class="reveal">
+    <div class="section-label" data-lang="fr">Financement</div>
+    <div class="section-label" data-lang="en">Funding</div>
+    <div class="section-label" data-lang="ht">Finansman</div>
+
+    <h2 class="section-title" style="font-size: 28px; margin-bottom: 12px;">
+      <span data-lang="fr">Appel à projets Québec-Haïti 2025–2027</span>
+      <span data-lang="en">Québec-Haiti Call for Projects 2025–2027</span>
+      <span data-lang="ht">Apèl a pwojè Kebèk-Ayiti 2025–2027</span>
+    </h2>
+    <p class="section-subtitle" style="margin-bottom: 24px;">
+      <span data-lang="fr">Ministère des Relations internationales et de la Francophonie du Québec (MRIF)</span>
+      <span data-lang="en">Québec Ministry of International Relations and la Francophonie (MRIF)</span>
+      <span data-lang="ht">Ministè Relasyon Entènasyonal ak Frankofoni Kebèk (MRIF)</span>
+    </p>
+    <div style="display:flex; gap:32px; justify-content:center; flex-wrap:wrap;">
+      <div style="background:white; padding:20px 32px; border-radius:10px; border:1px solid var(--gray-200);">
+        <div style="font-size:12px; color:var(--gray-600); font-weight:600;">2025–2026</div>
+        <div style="font-family:var(--font-display); font-size:28px; font-weight:900; color:var(--navy);">7 000 $</div>
+      </div>
+      <div style="background:white; padding:20px 32px; border-radius:10px; border:1px solid var(--gray-200);">
+        <div style="font-size:12px; color:var(--gray-600); font-weight:600;">2026–2027</div>
+        <div style="font-family:var(--font-display); font-size:28px; font-weight:900; color:var(--navy);">7 000 $</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section class="cta-section" id="contact">
+  <h2 data-lang="fr">Rejoignez cette initiative</h2>
+  <h2 data-lang="en">Join this initiative</h2>
+  <h2 data-lang="ht">Vin jwenn inisyativ sa a</h2>
+
+  <p data-lang="fr">Pour toute question sur le programme, les partenariats ou les opportunités de recherche, contactez nos coordinateurs.</p>
+  <p data-lang="en">For questions about the program, partnerships, or research opportunities, contact our coordinators.</p>
+  <p data-lang="ht">Pou kesyon sou pwogram nan, patenarya oswa opòtinite rechèch, kontakte kòdonatè nou yo.</p>
+
+  <div class="contact-emails">
+    <a href="mailto:Paul.Celicourt@inrs.ca" class="contact-email">
+      <div>
+        <div class="email-role">INRS — Québec</div>
+        <div>Paul.Celicourt@inrs.ca</div>
+      </div>
+    </a>
+    <a href="mailto:ones.jean@ueh.edu.ht" class="contact-email">
+      <div>
+        <div class="email-role">UEH-CHCL — Haïti</div>
+        <div>ones.jean@ueh.edu.ht</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <svg width="28" height="28" viewBox="0 0 144 144" xmlns="http://www.w3.org/2000/svg">
+        <path d="M72 5 C72 5 24 54 24 82 C24 109 46 130 72 130 C98 130 120 109 120 82 C120 54 72 5 72 5Z" fill="rgba(255,255,255,0.2)"/>
+      </svg>
+      <span>LHH</span>
+    </div>
+    <div class="footer-links">
+      <a href="#about" data-lang="fr">Mission</a><a href="#about" data-lang="en">Mission</a><a href="#about" data-lang="ht">Misyon</a>
+      <a href="#programme" data-lang="fr">Programme</a><a href="#programme" data-lang="en">Program</a><a href="#programme" data-lang="ht">Pwogram</a>
+      <a href="#research" data-lang="fr">Recherche</a><a href="#research" data-lang="en">Research</a><a href="#research" data-lang="ht">Rechèch</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span data-lang="fr">© 2025 Laboratoire d'Hydraulique et d'Hydroinformatique · UEH-CHCL · INRS Québec</span>
+    <span data-lang="en">© 2025 Laboratory of Hydraulics and Hydroinformatics · UEH-CHCL · INRS Québec</span>
+    <span data-lang="ht">© 2025 Laboratwa Idwolik ak Idwoenfoòmatik · UEH-CHCL · INRS Kebèk</span>
+    <div class="mrif-note" data-lang="fr">Projet financé par le Ministère des Relations internationales et de la Francophonie du Québec</div>
+    <div class="mrif-note" data-lang="en">Project funded by the Québec Ministry of International Relations and la Francophonie</div>
+    <div class="mrif-note" data-lang="ht">Pwojè ki finanse pa Ministè Relasyon Entènasyonal ak Frankofoni Kebèk</div>
+  </div>
+</footer>
+
+<script>
+// Language switching
+let currentLang = 'fr';
+
+function setLang(lang) {
+  currentLang = lang;
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim() === (lang === 'fr' ? 'FR' : lang === 'en' ? 'EN' : 'KR'));
+  });
+  // Show/hide elements
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    const tag = el.tagName.toLowerCase();
+    if (tag === 'span' || tag === 'a') {
+      el.style.display = el.getAttribute('data-lang') === lang ? 'inline' : 'none';
+    } else {
+      el.style.display = el.getAttribute('data-lang') === lang ? 'block' : 'none';
+    }
+  });
+  document.documentElement.lang = lang === 'ht' ? 'ht' : lang;
+}
+
+// Initialize
+setLang('fr');
+
+// Scroll effects
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
